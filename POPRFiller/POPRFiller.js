@@ -16,5 +16,22 @@
 - close both files
 */
 
-const secrets = requires('./secrets.json');
-var XLSX = require("xlsx");
+const secrets = require('./secrets.json');
+const XLSX = require("xlsx");
+
+
+/* Command line arguement */
+const args = process.argv.slice(2);
+
+console.log(args);
+
+/* Handle exceptions at Command line arguement */
+
+
+
+/* Read the excel file */
+let filename 
+
+let workbook = XLSX.readFile(filename);
+
+/* Extract the data */
