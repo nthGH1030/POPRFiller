@@ -30,8 +30,19 @@ console.log(args);
 
 
 /* Read the excel file */
-let filename 
+let filename = args[0];
 
 let workbook = XLSX.readFile(filename);
+//This is the first worksheet of the file
+const sheetName = workbook.SheetNames[0];
+const worksheet = workbook.Sheets[sheetName];
 
 /* Extract the data */
+
+const cellAddresses = ["A11", "A12", "A13"];
+const cellObjects = cellAddresses.map(cellAddress => {
+    cellValue = worksheet[cellAddress]?.v;
+    return {cellAddress : cellValue};
+});
+
+console.log(cellObjects);
