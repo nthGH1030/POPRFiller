@@ -23,26 +23,31 @@ const XLSX = require("xlsx");
 /* Command line arguement */
 const args = process.argv.slice(2);
 
-console.log(args);
-
 /* Handle exceptions at Command line arguement */
 
 
 
 /* Read the excel file */
 let filename = args[0];
-
 let workbook = XLSX.readFile(filename);
+
 //This is the first worksheet of the file
 const sheetName = workbook.SheetNames[0];
 const worksheet = workbook.Sheets[sheetName];
 
 /* Extract the data */
+let row = args[1]
+let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
-const cellAddresses = ["A11", "A12", "A13"];
-const cellObjects = cellAddresses.map(cellAddress => {
-    cellValue = worksheet[cellAddress]?.v;
-    return {cellAddress : cellValue};
-});
+const cellAddresses = columns.reduce((result,column) => {
+    let cellAddress = column.concat(row);
+    result[cellAddress] = "";
+    return result;
+},{});
 
-console.log(cellObjects);
+for (let key in cellAddresses) {
+    cellValue = worksheet[key]?.v;
+    cellAddresses[key] = cellValue;
+}
+
+console.log(cellAddresses);
