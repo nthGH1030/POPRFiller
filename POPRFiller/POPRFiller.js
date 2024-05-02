@@ -43,6 +43,11 @@ const extractedObj = {};
 
 const secretKeys = Object.keys(secrets);
 
+/*Iterate each secretKeys, 
+assign the secretKey as the new key, 
+Get the value using worksheet[CellAddress]
+assign the new value to the extractedObj[secretKey] */
+
 for (let i = 0; i < secretKeys.length; i++) {
   const secretKey = secretKeys[i];
   const column = columns[i];
