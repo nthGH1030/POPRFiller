@@ -23,8 +23,12 @@ const XLSX = require("xlsx");
 /* Command line arguement */
 const args = process.argv.slice(2);
 
-/* Handle exceptions at Command line arguement */
 
+
+/* Handle exceptions at Command line arguement */
+if (isNaN(args[1])) {
+    throw new TypeError("The row you typed is not a number");
+  }
 
 
 /* Read the excel file */
@@ -43,10 +47,12 @@ const extractedObj = {};
 
 const secretKeys = Object.keys(secrets);
 
-/*Iterate each secretKeys, 
-assign the secretKey as the new key, 
+/*
+Iterate both secretKeys and columns in a single loop
+Update the addresValue with column per iteration,
 Get the value using worksheet[CellAddress]
-assign the new value to the extractedObj[secretKey] */
+assign the new value to the extractedObj[secretKey] 
+*/
 
 for (let i = 0; i < secretKeys.length; i++) {
   const secretKey = secretKeys[i];
@@ -57,3 +63,10 @@ for (let i = 0; i < secretKeys.length; i++) {
 }
 
 console.log(extractedObj);
+
+/* Open the template */
+
+/* replace the value in the respective field in the tempalte */
+//Must respond to the input of PO / PR
+
+/* Save as a new file */
