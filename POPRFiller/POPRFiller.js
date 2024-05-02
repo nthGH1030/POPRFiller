@@ -39,6 +39,7 @@ const worksheet = workbook.Sheets[sheetName];
 let row = args[1]
 let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
+
 const cellAddresses = columns.reduce((result,column) => {
     let cellAddress = column.concat(row);
     result[cellAddress] = "";
@@ -46,8 +47,23 @@ const cellAddresses = columns.reduce((result,column) => {
 },{});
 
 for (let key in cellAddresses) {
+
     cellValue = worksheet[key]?.v;
     cellAddresses[key] = cellValue;
+
 }
 
-console.log(cellAddresses);
+/*Update the key with the keys in secet*/
+const combinedObj = {};
+
+const obj1Keys = Object.keys(cellAddresses);
+const obj2Keys = Object.keys(secrets);
+
+for (let i = 0; i < obj1Keys.length; i++) {
+  const key1 = obj1Keys[i];
+  const key2 = obj2Keys[i];
+  combinedObj[key2] = cellAddresses[key1];
+}
+
+console.log(combinedObj)
+
