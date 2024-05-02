@@ -39,31 +39,16 @@ const worksheet = workbook.Sheets[sheetName];
 let row = args[1]
 let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
+const extractedObj = {};
 
-const cellAddresses = columns.reduce((result,column) => {
-    let cellAddress = column.concat(row);
-    result[cellAddress] = "";
-    return result;
-},{});
+const secretKeys = Object.keys(secrets);
 
-for (let key in cellAddresses) {
-
-    cellValue = worksheet[key]?.v;
-    cellAddresses[key] = cellValue;
-
+for (let i = 0; i < secretKeys.length; i++) {
+  const secretKey = secretKeys[i];
+  const column = columns[i];
+  const cellAddress = column.concat(row);
+  const cellValue = worksheet[cellAddress]?.v || "";
+  extractedObj[secretKey] = cellValue;
 }
 
-/*Update the key with the keys in secet*/
-const combinedObj = {};
-
-const obj1Keys = Object.keys(cellAddresses);
-const obj2Keys = Object.keys(secrets);
-
-for (let i = 0; i < obj1Keys.length; i++) {
-  const key1 = obj1Keys[i];
-  const key2 = obj2Keys[i];
-  combinedObj[key2] = cellAddresses[key1];
-}
-
-console.log(combinedObj)
-
+console.log(extractedObj);
