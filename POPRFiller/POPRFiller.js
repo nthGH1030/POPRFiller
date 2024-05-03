@@ -33,6 +33,7 @@ if (isNaN(args[1])) {
 
 /* Read the excel file */
 let filename = args[0];
+let template = args[2];
 let workbook = XLSX.readFile(filename);
 
 //This is the first worksheet of the file
@@ -49,7 +50,7 @@ const secretKeys = Object.keys(secrets);
 
 /*
 Iterate both secretKeys and columns in a single loop
-Update the addresValue with column per iteration,
+Update the addressValue with column per iteration,
 Get the value using worksheet[CellAddress]
 assign the new value to the extractedObj[secretKey] 
 */
@@ -64,9 +65,23 @@ for (let i = 0; i < secretKeys.length; i++) {
 
 console.log(extractedObj);
 
-/* Open the template */
+//pass in the tempalte to PO / PR function
+args[3] == "po" ? handlePO(template) : handlePR(template);
 
-/* replace the value in the respective field in the tempalte */
-//Must respond to the input of PO / PR
+function handlePO(template) {
+    /* Open the template */
+    let filename = template;
+    let workbook = XLSX.readFile(filename);
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
 
-/* Save as a new file */
+    /* replace the value in the respective field in the tempalte */
+
+    /* Save as a new file */
+
+}
+
+function handlePR(template) {
+
+
+}
