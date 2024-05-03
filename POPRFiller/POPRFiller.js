@@ -43,6 +43,7 @@ const worksheet = workbook.Sheets[sheetName];
 /* Extract the data */
 let row = args[1]
 let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+let indexRow = "7";
 
 const extractedObj = {};
 
@@ -55,12 +56,17 @@ Get the value using worksheet[CellAddress]
 assign the new value to the extractedObj[secretKey] 
 */
 
-for (let i = 0; i < secretKeys.length; i++) {
-  const secretKey = secretKeys[i];
+for (let i = 0; i < columns.length; i++) {
+  //const secretKey = secretKeys[i];
   const column = columns[i];
+
+  const keyAddress = column.concat(indexRow); 
+  const keyValue = worksheet[keyAddress]?.v || "";
+
   const cellAddress = column.concat(row);
   const cellValue = worksheet[cellAddress]?.v || "";
-  extractedObj[secretKey] = cellValue;
+
+  extractedObj[keyValue] = cellValue;
 }
 
 console.log(extractedObj);
@@ -76,6 +82,9 @@ function handlePO(template) {
     const worksheet = workbook.Sheets[sheetName];
 
     /* replace the value in the respective field in the tempalte */
+    let PO = {
+        
+    }
 
     /* Save as a new file */
 
