@@ -17,13 +17,12 @@
 */
 
 const secrets = require('./secrets.json');
-const XLSX = require("xlsx");
+//const XLSX = require("xlsx");
+const ExcelJS = require('exceljs');
 //const secretValue = Object.values(secrets);
 
 /* Command line arguement */
 const args = process.argv.slice(2);
-
-
 
 /* Handle exceptions at Command line arguement */
 if (isNaN(args[1])) {
@@ -36,38 +35,61 @@ let filename = args[0];
 let row = args[1];
 let templatePO = secrets.templatePO;
 let templatePR = secrets.templatePR;
-let workbook = XLSX.readFile(filename);
 
-//This is the first worksheet of the file
-const sheetName = workbook.SheetNames[0];
-const worksheet = workbook.Sheets[sheetName];
+async function readExcelFile(filename) {
+    try{
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile(filename);
+        const worksheet = workbook.getWorksheet('POPR summary');
+        console.log(worksheet)
+        return worksheet
+    } catch (error) {
+        console.log('Error:', error);
+    }
+    //This is the first worksheet of the file
+    //const sheetName = workbook.SheetNames[0];
+    
+}
+
+readExcelFile(filename);
+
 
 /* Extract the data */
-
+/*
 let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 let indexRow = "7";
 
 const extractedObj = {};
 
 
+
+
 for (let i = 0; i < columns.length; i++) {
   const column = columns[i];
 
   const keyAddress = column.concat(indexRow); 
-  const keyValue = worksheet[keyAddress]?.v || "";
+  const keyValue = worksheet.getCell(keyAddress)?.value || "";
 
   const cellAddress = column.concat(row);
-  const cellValue = worksheet[cellAddress]?.v || "";
+  const cellValue = worksheet.getCell(cellAddress)?.value || "";
 
   extractedObj[keyValue] = cellValue;
 }
 
 console.log(extractedObj);
 
+
+
+
+
+
+
 //Call PO or PR 
+/*
 args[2] === 'po' ? handlePO(templatePO, extractedObj, secrets)
   : args[2] === 'pr' ? handlePR(templatePR, extractedObj, secrets)
   : (() => { throw new Error("You can only input pr or po"); })();
+  */
 
 function handlePO(templatePO, extractedObj, secrets) {
     /* Open the template */
