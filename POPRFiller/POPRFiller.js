@@ -41,42 +41,41 @@ async function readExcelFile(filename) {
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.readFile(filename);
         const worksheet = workbook.getWorksheet('POPR summary');
-        console.log(worksheet)
+        //console.log(worksheet)
         return worksheet
     } catch (error) {
         console.log('Error:', error);
     }
-    //This is the first worksheet of the file
-    //const sheetName = workbook.SheetNames[0];
-    
 }
 
-readExcelFile(filename);
+readExcelFile(filename)
+    .then((worksheet) => {
+    /* Extract the data */
+
+    let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+    let indexRow = "7";
+
+    const extractedObj = {};
+
+    for (let i = 0; i < columns.length; i++) {
+    const column = columns[i];
+
+    const keyAddress = column.concat(indexRow); 
+    const keyValue = worksheet.getCell(keyAddress)?.value || "";
+
+    const cellAddress = column.concat(row);
+    const cellValue = worksheet.getCell(cellAddress)?.value || "";
+
+    extractedObj[keyValue] = cellValue;
+    }
+
+    console.log(extractedObj);
+})
+.catch((error) => {
+    console.log('Error:', error);
+});
 
 
-/* Extract the data */
-/*
-let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
-let indexRow = "7";
-
-const extractedObj = {};
-
-
-
-
-for (let i = 0; i < columns.length; i++) {
-  const column = columns[i];
-
-  const keyAddress = column.concat(indexRow); 
-  const keyValue = worksheet.getCell(keyAddress)?.value || "";
-
-  const cellAddress = column.concat(row);
-  const cellValue = worksheet.getCell(cellAddress)?.value || "";
-
-  extractedObj[keyValue] = cellValue;
-}
-
-console.log(extractedObj);
 
 
 
