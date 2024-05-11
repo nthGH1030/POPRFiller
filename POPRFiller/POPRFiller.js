@@ -7,9 +7,6 @@ const ExcelJS = require('exceljs');
 //Catch user input
 const args = process.argv.slice(2);
 
-let filename = args[0];
-let row = args[1];
-
 /*
 args[2] === 'po' ? handlePO(templatePO, extractedObj, secrets, worksheet)
     : args[2] === 'pr' ? handlePR(templatePR, extractedObj, secrets)
@@ -20,8 +17,8 @@ if (isNaN(args[1])) {
     throw new TypeError("The row you typed is not a number");
   }
 
+  /*
 //Re-write using 1 central table to handle everything
-
 //Read excel file
 async function readExcelFile(filename){
     try{
@@ -58,52 +55,51 @@ readExcelFile(filename)
         extractedObj[keyValue] = cellValue;
         }
         console.log(extractedObj);
-        return(extractedObj);
+        
+        args[2] === 'po' ? handlePO(workSheets, extractedObj)
+            : args[2] === 'pr' ? console.log("you called PR")
+            : (() => { throw new Error("You can only input pr or po"); })();
         
     }) .catch((error) => {
         console.log('Error:', error);
     });
 
+    function handlePO(worksheets, extractedObj) {
 
+        const templatePOWorksheet = worksheets[1];
+        
+        //Replace the value in the respective field in the template 
+        let PO = {
+        "PO Number": "F3",
+        "Entity": "C9",
+        "Description": "C14",
+        "Type of expense": "C17",
+        "Approved PO amount": "C19",
+        "Vendor": "C37",
+        "staff": "C44"
+        }
+        
+        for (let [key, value] of Object.entries(PO)) {
+        if (key in extractedObj) {
+            // Get the corresponding cell address
+            let cellAddress = value;
+            // Replace the cell value
+            templatePOWorksheet.getCell(cellAddress).value = extractedObj[key];
+        }
+        }
 
-    async function handlePO(templatePO, extractedObj, secrets, worksheet) {
-        try {
-          let POSheet = 'Purchase Requisition';
-      
-          //Open the template 
-          const templateWorksheet = await readExcelFile(templatePO, POSheet);
-      
-          //Replace the value in the respective field in the template 
-          let PO = {
-            "PO Number": "F3",
-            "Entity": "C9",
-            "Description": "C14",
-            "Type of expense": "C17",
-            "Approved PO amount": "C19",
-            "Vendor": "C37",
-            "staff": "C44"
-          }
-      
-          for (let [key, value] of Object.entries(PO)) {
-            if (key in extractedObj) {
-              // Get the corresponding cell address
-              let cellAddress = value;
-              // Replace the cell value
-              templateWorksheet.getCell(cellAddress).value = extractedObj[key];
-            }
-          }
+        
       
           // Save as a new file 
-          const outputFilename = 'newfile.xlsx';
-          await templateWorksheet.workbook.xlsx.writeFile(outputFilename);
+          
+          const outputFilename = 'newPO.xlsx';
+          templatePOWorksheet.workbook.xlsx.writeFile(outputFilename);
           console.log('Workbook saved as a new file:', outputFilename);
-        } catch (error) {
-          console.log('Error:', error);
-        }
+          
       }
+*/
 
-
-  /*
+  
 //Read the excel file 
 let filename = args[0];
 let row = args[1];
@@ -115,7 +111,7 @@ async function readExcelFile(filename, sheetName) {
     try{
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.readFile(filename);
-        const centrkworksheet = workbook.getWorksheet(sheetName);
+        const worksheet = workbook.getWorksheet(sheetName);
         //console.log(worksheet)
         return worksheet
     } catch (error) {
@@ -168,7 +164,7 @@ async function handlePO(templatePO, extractedObj, secrets, worksheet) {
       let PO = {
         "PO Number": "F3",
         "Entity": "C9",
-        "Description": "C14",
+        "Purchase description / Payment Certification reason": "C14",
         "Type of expense": "C17",
         "Approved PO amount": "C19",
         "Vendor": "C37",
@@ -192,7 +188,6 @@ async function handlePO(templatePO, extractedObj, secrets, worksheet) {
       console.log('Error:', error);
     }
   }
-
 
 
   //Old code using XLSX to write handlePR
