@@ -1,105 +1,14 @@
 
 const secrets = require('./secrets.json');
-//const XLSX = require("xlsx");
 const ExcelJS = require('exceljs');
-//const secretValue = Object.values(secrets);
 
 //Catch user input
 const args = process.argv.slice(2);
 
-/*
-args[2] === 'po' ? handlePO(templatePO, extractedObj, secrets, worksheet)
-    : args[2] === 'pr' ? handlePR(templatePR, extractedObj, secrets)
-        : (() => { throw new Error("You can only input pr or po"); })();
-*/
-
 if (isNaN(args[1])) {
     throw new TypeError("The row you typed is not a number");
   }
-
-  /*
-//Re-write using 1 central table to handle everything
-//Read excel file
-async function readExcelFile(filename){
-    try{
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(filename);
-        const centralTableWorksheet = workbook.getWorksheet('POPR summary');
-        const templatePOWorksheet = workbook.getWorksheet('template_PO');
-        const workSheets = [centralTableWorksheet, templatePOWorksheet];
-        return workSheets
-    }
-    catch (error) { 
-        console.log('Error: ', error);
-    }
-}
-
-readExcelFile(filename)
-    .then((workSheets) => {
-        // Extract the data 
-
-        let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
-        let indexRow = "7";
-
-        const extractedObj = {};
-
-        for (let i = 0; i < columns.length; i++) {
-        const column = columns[i];
-
-        const keyAddress = column.concat(indexRow); 
-        const keyValue = workSheets[0].getCell(keyAddress)?.value || "";
-
-        const cellAddress = column.concat(row);
-        const cellValue = workSheets[0].getCell(cellAddress)?.value || "";
-
-        extractedObj[keyValue] = cellValue;
-        }
-        console.log(extractedObj);
-        
-        args[2] === 'po' ? handlePO(workSheets, extractedObj)
-            : args[2] === 'pr' ? console.log("you called PR")
-            : (() => { throw new Error("You can only input pr or po"); })();
-        
-    }) .catch((error) => {
-        console.log('Error:', error);
-    });
-
-    function handlePO(worksheets, extractedObj) {
-
-        const templatePOWorksheet = worksheets[1];
-        
-        //Replace the value in the respective field in the template 
-        let PO = {
-        "PO Number": "F3",
-        "Entity": "C9",
-        "Description": "C14",
-        "Type of expense": "C17",
-        "Approved PO amount": "C19",
-        "Vendor": "C37",
-        "staff": "C44"
-        }
-        
-        for (let [key, value] of Object.entries(PO)) {
-        if (key in extractedObj) {
-            // Get the corresponding cell address
-            let cellAddress = value;
-            // Replace the cell value
-            templatePOWorksheet.getCell(cellAddress).value = extractedObj[key];
-        }
-        }
-
-        
-      
-          // Save as a new file 
-          
-          const outputFilename = 'newPO.xlsx';
-          templatePOWorksheet.workbook.xlsx.writeFile(outputFilename);
-          console.log('Workbook saved as a new file:', outputFilename);
-          
-      }
-*/
-
-  
+ 
 //Read the excel file 
 let filename = args[0];
 let row = args[1];
@@ -143,7 +52,7 @@ readExcelFile(filename, centralSheet)
     //console.log(extractedObj);
 
     //Call PO or PR
-    args[2] === 'po' ? handlePO(templatePO, extractedObj, secrets, worksheet)
+    args[2] === 'po' ? handlePO(templatePO, extractedObj)
     : args[2] === 'pr' ? handlePR(templatePR, extractedObj, secrets)
     : (() => { throw new Error("You can only input pr or po"); })();
     })
@@ -153,7 +62,7 @@ readExcelFile(filename, centralSheet)
     console.log('Error:', error);
 });
 
-async function handlePO(templatePO, extractedObj, secrets, worksheet) {
+async function handlePO(templatePO, extractedObj) {
     try {
       let POSheet = 'Purchase Requisition';
   
@@ -182,7 +91,7 @@ async function handlePO(templatePO, extractedObj, secrets, worksheet) {
   
       // Save as a new file 
       const outputFilename = 'newfile.xlsx';
-      await templateWorksheet.workbook.xlsx.writeFile(outputFilename);
+      templateWorksheet.workbook.xlsx.writeFile(outputFilename);
       console.log('Workbook saved as a new file:', outputFilename);
     } catch (error) {
       console.log('Error:', error);
@@ -190,8 +99,7 @@ async function handlePO(templatePO, extractedObj, secrets, worksheet) {
   }
 
 
-  //Old code using XLSX to write handlePR
-/*
+ /*
 function handlePR(templatePR, extractedObj, secrets) {
     //Open the template 
     let filename = templatePR;
