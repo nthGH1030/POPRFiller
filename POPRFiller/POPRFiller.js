@@ -98,6 +98,41 @@ async function handlePO(templatePO, extractedObj) {
     }
   }
 
+  async function handlePR(templatePR, extractedObj)
+  {
+    try{
+        let PRSheet = 'Payment Request'
+        const templateWorksheet = await readExcelFile(templatePR, PRSheet);
+
+        //Replace the value in the respective field in the template 
+        let PR = {        
+            'Entity': 'C7',
+            'PO Number': 'D13',
+            'Vendor': 'C16',
+            'Capex Nature': 'C36',
+            'Purchase description / Payment Certification reason': 'C25',
+            'Approved PO amount': 'D39',
+            'Delivery date': 'C19',
+            'Invoice number': 'D31'
+        }
+    
+        for (let [key, value] of Object.entries(PR)) {
+            if (key in extractedObj) {
+                // Get the corresponding cell address
+                let cellAddress = value
+                // Replace the cell value
+                templateWorksheet.getCell(cellAddress).value = extractedObj[key];
+            }
+        }
+        // Save as a new file 
+        const outputFilename = 'PR.xlsx';
+        templateWorksheet.workbook.xlsx.writeFile(outputFilename);
+        console.log('Workbook saved as a new file:', outputFilename);
+
+    } catch(error) {
+        console.log('Error:', error);
+    }
+  }
 
  /*
 function handlePR(templatePR, extractedObj, secrets) {
