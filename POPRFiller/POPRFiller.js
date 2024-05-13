@@ -8,6 +8,11 @@ const args = process.argv.slice(2);
 if (isNaN(args[1])) {
     throw new TypeError("The row you typed is not a number");
   }
+
+if (args[2] != 'po' || 'pr')
+{
+    throw new Error("You can only input pr or po");
+}
  
 //Read the excel file 
 let filename = args[0];
@@ -53,11 +58,10 @@ readExcelFile(filename, centralSheet)
 
     //Call PO or PR
     args[2] === 'po' ? handlePO(templatePO, extractedObj)
-    : args[2] === 'pr' ? handlePR(templatePR, extractedObj, secrets)
-    : (() => { throw new Error("You can only input pr or po"); })();
+    : args[2] === 'pr' ? handlePR(templatePR, extractedObj):
+    null;
     })
-
-
+    
 .catch((error) => {
     console.log('Error:', error);
 });
@@ -134,38 +138,3 @@ async function handlePO(templatePO, extractedObj) {
     }
   }
 
- /*
-function handlePR(templatePR, extractedObj, secrets) {
-    //Open the template 
-    let filename = templatePR;
-    let workbook = XLSX.readFile(filename);
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-
-    //replace the value in the respective field in the tempalte 
-    let PR = {        
-        'Entity': 'C7',
-        'PO Number': 'D13',
-        'Vendor': 'C16',
-        'Capex Nature': 'C36',
-        'Purchase description / Payment Certification reason': 'C25',
-        'Approved PO amount': 'D39',
-        'Delivery date': 'C19',
-        'Invoice number': 'D31'
-    }
-
-    for (let [key, value] of Object.entries(PR)) {
-        if (key in extractedObj) {
-            // Get the corresponding cell address
-            let cellAddress = value
-            // Replace the cell value
-            worksheet[cellAddress].v = extractedObj[key];
-        }
-    }
-
-    //Save as a new file 
-    // Save the new workbook as a new file
-    XLSX.writeFile(workbook, secrets.PRpath);
-
-}
-*/
