@@ -29,7 +29,7 @@ async function readExcelFile(filename, sheetName) {
         //console.log(worksheet)
         return worksheet
     } catch (error) {
-        console.log('Error:', error);
+        console.log('ReadFileError:', error);
     }
 }
 
@@ -98,7 +98,7 @@ async function handlePO(templatePO, extractedObj) {
       templateWorksheet.workbook.xlsx.writeFile(outputFilename);
       console.log('Workbook saved as a new file:', outputFilename);
     } catch (error) {
-      console.log('Error:', error);
+      console.log('WriteFileError:', error);
     }
   }
 
@@ -134,7 +134,7 @@ async function handlePO(templatePO, extractedObj) {
         console.log('Workbook saved as a new file:', outputFilename);
 
     } catch(error) {
-        console.log('Error:', error);
+        console.log('WriteFileError:', error);
     }
   }
 
