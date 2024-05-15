@@ -62,9 +62,6 @@ readExcelFile(filename, centralSheet)
     null;
     })
     
-.catch((error) => {
-    console.log('Error:', error);
-});
 
 async function handlePO(templatePO, extractedObj) {
     try {
@@ -134,7 +131,7 @@ async function handlePO(templatePO, extractedObj) {
         console.log('Workbook saved as a new file:', outputFilename);
 
     } catch(error) {
-        console.log('WriteFileError:', error);
+        console.log('PRWriteFileError:', error);
     }
   }
 
