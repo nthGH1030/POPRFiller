@@ -5,18 +5,18 @@ const ExcelJS = require('exceljs');
 //Catch user input
 const args = process.argv.slice(2);
 
-if (isNaN(args[1])) {
+if (isNaN(args[0])) {
     throw new TypeError("The row you typed is not a number");
   }
 
-if (args[2] != 'po' || 'pr')
+if (args[1] != 'po' && args[1] != 'pr')
 {
     throw new Error("You can only input pr or po");
 }
  
 //Read the excel file 
-let filename = args[0];
-let row = args[1];
+let filename = secrets.Centralpath;
+let row = args[0];
 let templatePO = secrets.templatePO;
 let templatePR = secrets.templatePR;
 let centralSheet = 'POPR summary';
@@ -57,8 +57,8 @@ readExcelFile(filename, centralSheet)
     //console.log(extractedObj);
 
     //Call PO or PR
-    args[2] === 'po' ? handlePO(templatePO, extractedObj)
-    : args[2] === 'pr' ? handlePR(templatePR, extractedObj):
+    args[1] === 'po' ? handlePO(templatePO, extractedObj)
+    : args[1] === 'pr' ? handlePR(templatePR, extractedObj):
     null;
     })
     
@@ -94,7 +94,7 @@ async function handlePO(templatePO, extractedObj) {
       }
   
       // Save as a new file 
-      const outputFilename = 'newfile.xlsx';
+      const outputFilename = 'PO'+ extractedObj['PO Number'] + '.xlsx';
       templateWorksheet.workbook.xlsx.writeFile(outputFilename);
       console.log('Workbook saved as a new file:', outputFilename);
     } catch (error) {
