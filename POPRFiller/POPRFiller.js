@@ -129,7 +129,7 @@ async function handlePO(templatePO, extractedObj) {
             }
         }
         // Save as a new file 
-        const outputFilename = 'PR.xlsx';
+        const outputFilename = 'PR'+ extractedObj['PO Number'] + '.xlsx';
         templateWorksheet.workbook.xlsx.writeFile(outputFilename);
         console.log('Workbook saved as a new file:', outputFilename);
 
