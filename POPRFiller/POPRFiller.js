@@ -125,8 +125,12 @@ async function handlePO(templatePO, extractedObj) {
                 let cellAddress = value
                 // Replace the cell value
                 if (key == 'Total Payment paid')
+                
                 {
-                  templateWorksheet.getCell(cellAddress).value = extractedObj[key];
+                  const formulaResult = extractedObj[key].result;
+                  
+                  templateWorksheet.getCell(cellAddress).value = formulaResult;
+
                 }
                 else {
                   templateWorksheet.getCell(cellAddress).value = extractedObj[key];
