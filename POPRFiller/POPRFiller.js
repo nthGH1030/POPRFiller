@@ -60,7 +60,7 @@ readExcelFile(filename, centralSheet)
     args[1] === 'po' ? handlePO(templatePO, extractedObj)
     : args[1] === 'pr' ? handlePR(templatePR, extractedObj):
     null;
-    })
+})
     
 
 async function handlePO(templatePO, extractedObj) {
@@ -95,7 +95,7 @@ async function handlePO(templatePO, extractedObj) {
       templateWorksheet.workbook.xlsx.writeFile(outputFilename);
       console.log('Workbook saved as a new file:', outputFilename);
     } catch (error) {
-      console.log('WriteFileError:', error);
+      console.log('POWriteFileError:', error);
     }
   }
 
@@ -113,7 +113,9 @@ async function handlePO(templatePO, extractedObj) {
             'Capex Nature': 'C36',
             'Purchase description / Payment Certification reason': 'C25',
             'Approved PO amount': 'D39',
-            'Delivery date': 'C19',
+            'Total Payment paid': 'D42',
+            'Paid Requested': 'C19',
+            'Delivery date': 'C22',
             'Invoice number': 'D31'
         }
     
@@ -122,7 +124,14 @@ async function handlePO(templatePO, extractedObj) {
                 // Get the corresponding cell address
                 let cellAddress = value
                 // Replace the cell value
-                templateWorksheet.getCell(cellAddress).value = extractedObj[key];
+                if (key == 'Total Payment paid')
+                {
+                  templateWorksheet.getCell(cellAddress).value = extractedObj[key];
+                }
+                else {
+                  templateWorksheet.getCell(cellAddress).value = extractedObj[key];
+                }
+                
             }
         }
         // Save as a new file 
